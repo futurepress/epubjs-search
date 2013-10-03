@@ -1,0 +1,3 @@
+[submodule "cheshire3"]
+	path = cheshire3
+	url = https://github.com/cheshire3/cheshire3.git
