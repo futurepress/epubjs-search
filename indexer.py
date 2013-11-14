@@ -16,7 +16,7 @@ import os
 import xml.etree.ElementTree as ET
 import zipfile
 import datetime
-import epub
+#import epub
 from optparse import OptionParser
 
 from epubsearch import EpubParser
