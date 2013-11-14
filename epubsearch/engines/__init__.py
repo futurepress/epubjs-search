@@ -1,0 +1,1 @@
+from whooshengine import WhooshEngine
