@@ -6,7 +6,7 @@ The script generates a rudimentary appcache file based upon the content.opf file
 an uncompressed epub directory or a compressed epub file and places it in the current directory
 
 Usage: acm_gen.py --input='/path/to/content.opf' which links to the uncompressed epub directory that includes the content.opf
-OR 		 --input='/path/to/book.epub' which links to the compressed epub file
+OR     --input='/path/to/book.epub' which links to the compressed epub file
 """
  
 __author__ = 'Futurepress'
@@ -33,7 +33,7 @@ def get_parameters():
     # code block to check for empty path, needed? path that includes proper filename, then valid file check
     if not options.input:
         options.input = "moby-dick"
- 
+
     else:
         return {'input': options.input,'file': options.input[-3:].lower(), 'folder': options.input}
 
@@ -41,7 +41,7 @@ def get_parameters():
 def main():
     # get user defined parameters
     userParams = get_parameters()
-    
+
     epub = EpubParser(userParams['folder'])
 
     index = EpubIndexer('whoosh')

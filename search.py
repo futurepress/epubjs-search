@@ -5,13 +5,11 @@ from flask import jsonify
 from epubsearch import EpubIndexer
 
 app = Flask(__name__)
-
 index = EpubIndexer("whoosh")
 
 @app.route("/")
 def home():
-  return "try /search?q=whale"
-  
+    return "try /search?q=whale"
 
 @app.route("/search")
 def search():
