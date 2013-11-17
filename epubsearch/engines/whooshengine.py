@@ -3,17 +3,19 @@ import whoosh.index as index
 from whoosh.fields import *
 from bs4 import BeautifulSoup
 from whoosh.qparser import QueryParser
+from baseengine import BaseEngine
 
-class WhooshEngine(object):
+class WhooshEngine(BaseEngine):
     # whoosh
-    schema = Schema(title=TEXT(stored=True), path=ID(stored=True), href=ID(stored=True), cfiBase=TEXT(stored=True), spinePos=TEXT(stored=True), content=TEXT)
-    indexdir = ''
+    schema = Schema(title=TEXT(stored=True), path=TEXT(stored=True), href=ID(stored=True), cfiBase=TEXT(stored=True), spinePos=TEXT(stored=True), content=TEXT)
+    database = ''
 
-    def __init__(self, indexdir="indexdir"):
-        self.indexdir = indexdir
+    # def __init__(self, database="indexdir"):
+    #     self.database = database
 
+    def open(self):
         try:
-            self.ix = index.open_dir("indexdir")
+            self.ix = index.open_dir(self.database)
         except Exception, e:
             raise "No DB"
 
@@ -21,15 +23,15 @@ class WhooshEngine(object):
         try:
             self.ix = index.open_dir("indexdir")
         except Exception, e:
-            self.create()
+            self.ix = create_in(self.database, self.schema)
             print "No DB, creating"
 
         self.writer = self.ix.writer()
     
-    def add(self, filename='', href='', title='', cfiBase='', spinePos=''):
-        text = self.__get_text(filename)
-        self.writer.add_document(title=unicode(title.decode('utf-8')), path=unicode(filename), href=unicode(href), cfiBase=unicode(cfiBase), spinePos=unicode(spinePos), content=unicode(text))
-        print "Indexed: " + title + ' | ' + filename + ' | ' + href + ' | ' + str(spinePos)
+    def add(self, path='', href='', title='', cfiBase='', spinePos=''):
+        text = self.__get_text(path)
+        self.writer.add_document(title=unicode(title.decode('utf-8')), path=unicode(path), href=unicode(href), cfiBase=unicode(cfiBase), spinePos=unicode(spinePos), content=unicode(text))
+        print "Indexed: " + title + ' | ' + path + ' | ' + href + ' | ' + str(spinePos)
 
     def finished(self):
         self.writer.commit()
@@ -48,7 +50,7 @@ class WhooshEngine(object):
                 item['title'] = hit["title"].encode("utf-8")
                 item['cfiBase'] = hit["cfiBase"].encode("utf-8")
                 item['spinePos'] = hit["spinePos"].encode("utf-8")
-
+                # print "decoded: " + item['title']
                 with open(hit["path"]) as fileobj:
                     filecontents = fileobj.read().decode("utf-8")
                     item['highlight'] = hit.highlights("content", text=filecontents).encode("utf-8")

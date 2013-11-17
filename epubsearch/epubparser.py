@@ -129,7 +129,7 @@ class EpubParser(object):
             if item["idref"] in self.manifest:
                 item["href"] = self.manifest[item["idref"]]['href']
 
-            print self.titles
+            # print self.titles
             if self.titles and item["href"] in self.titles:
                 item['title'] = self.titles[item["href"]]
             else:

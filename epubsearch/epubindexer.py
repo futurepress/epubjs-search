@@ -21,8 +21,9 @@ class EpubIndexer(object):
 
         for spineItem in epub.spine:
 
-            filename = epub.base + "/" + spineItem['href']
-            self.engine.add(filename=filename, href=spineItem['href'], title=spineItem['title'], cfiBase=spineItem['cfiBase'], spinePos=spineItem['spinePos'])
+            path = epub.base + "/" + spineItem['href']
+
+            self.engine.add(path=path, href=spineItem['href'], title=spineItem['title'], cfiBase=spineItem['cfiBase'], spinePos=spineItem['spinePos'])
 
         self.engine.finished()
 
@@ -38,6 +39,7 @@ class EpubIndexer(object):
             baseitem['href'] = hit["href"]
             baseitem['path'] = hit["path"]
 
+            # print hit.items()
             # find base of cfi
             cfiBase = hit['cfiBase'] + "/!"
 

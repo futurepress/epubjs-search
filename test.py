@@ -7,6 +7,6 @@ epub = EpubParser("moby-dick")
 index = EpubIndexer("whoosh")
 index.load(epub)
 
-results = index.search("whale", 2)
+results = index.search("Moby", 2)
 if results:
     print results['results'][0]
