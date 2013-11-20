@@ -4,6 +4,9 @@ from lxml import etree
 
 import os
 
+class EpubError(Exception):
+    pass
+
 class EpubParser(object):
     base = ''
     manifest = {}
@@ -16,19 +19,20 @@ class EpubParser(object):
         if os.path.isdir(folder) == True:
             rootfile = self.parseRootFile(folder)
             if rootfile:
+                self.rootfile = rootfile
                 self.base = folder + os.path.dirname(rootfile)
                 self.manifest = self.parseManifest(folder + rootfile)
+                self.tocPath = self.getTocPath(self.manifest)
 
             if self.tocPath:
                 self.toc = self.parseToc(self.base + "/" + self.tocPath)
 
             self.spine = self.parseSpine(folder + rootfile)
         else :
-            raise "No Rootfile found"
+            raise EpubError("No Rootfile found")
 
     def parseRootFile(self, folder):
         container = folder + "/META-INF/container.xml";
-        rootfile = False;
 
         if os.path.isfile(container):
             tree = ET.parse(container)
@@ -40,7 +44,8 @@ class EpubParser(object):
                     return rootfile # Stop at first rootfile for now
 
         else:
-            raise("No container.xml found")
+            raise EpubError('No container.xml found')
+
         return False;
 
     def parseManifest(self, filename):
@@ -67,10 +72,22 @@ class EpubParser(object):
                 items[itemId] = {}
                 items[itemId]["href"] = child.attrib['href']
                 items[itemId]["media-type"] = child.attrib['media-type']
-                if items[itemId]["media-type"] == "application/x-dtbncx+xml":
-                    self.tocPath = items[itemId]["href"]
 
         return items
+
+    def getTocPath(self, manifest):
+        """
+        From the manifest items, find the item for the Toc
+        Return the Toc href
+        """
+        if "ncxtoc" in manifest:
+            return manifest["ncxtoc"]["href"]
+        else:
+            for item in manifest.values():
+                if item["media-type"] == "application/x-dtbncx+xml":
+                    return item["href"]
+
+        raise EpubError("No Toc File Found")
 
     def parseToc(self, filename):
         namespaces = {'xmlns': 'http://www.daisy.org/z3986/2005/ncx/'}
