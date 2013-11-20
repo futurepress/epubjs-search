@@ -4,6 +4,7 @@ from whoosh.fields import *
 from bs4 import BeautifulSoup
 from whoosh.qparser import QueryParser
 from baseengine import BaseEngine
+import os
 
 class WhooshEngine(BaseEngine):
     # whoosh
@@ -17,14 +18,17 @@ class WhooshEngine(BaseEngine):
         try:
             self.ix = index.open_dir(self.database)
         except Exception, e:
-            raise "No DB"
+            print "openning database {} failed".format(self.database)
 
     def create(self):
         try:
-            self.ix = index.open_dir("indexdir")
+            print "openning database {} to create".format(self.database)
+            self.ix = index.open_dir(self.database)
         except Exception, e:
+            print "openning database failed, creating {}".format(self.database)
+            os.mkdir(self.database)
             self.ix = create_in(self.database, self.schema)
-            print "No DB, creating"
+
 
         self.writer = self.ix.writer()
     

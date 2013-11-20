@@ -34,6 +34,7 @@ class EpubIndexer(object):
         r["results"] = []
 
         for hit in rawresults:
+            print hit
             baseitem = {}
             baseitem['title'] = hit["title"]
             baseitem['href'] = hit["href"]
@@ -51,6 +52,7 @@ class EpubIndexer(object):
                 parsedString = etree.tostring(tree.getroot())
                 # html = etree.HTML(parsedString)
                 xpath = './/*[contains(text(),"'+ q +'")]'
+                print xpath
 
                 matchedList = tree.xpath(xpath)
                 # print len(matchedList)
@@ -87,5 +89,7 @@ class EpubIndexer(object):
 
                 item['highlight'] = word.text # replace me with above
                 r["results"].append(item)
+
+            print
 
         return r

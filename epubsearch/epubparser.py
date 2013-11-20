@@ -4,9 +4,6 @@ from lxml import etree
 
 import os
 
-class EpubError(Exception):
-    pass
-
 class EpubParser(object):
     base = ''
     manifest = {}
@@ -48,10 +45,12 @@ class EpubParser(object):
 
         return False;
 
+    def parseMetadata(self, filename):
+        raise NotImplementedError
+
     def parseManifest(self, filename):
         """
-        Parse the content.opf file.  Is it good practice to close file used
-        for ElementTree processing?
+        Parse the content.opf file.
         """
         namespaces = {'xmlns': 'http://www.idpf.org/2007/opf',
             'dc':'http://purl.org/dc/elements/1.1/',
@@ -118,8 +117,7 @@ class EpubParser(object):
 
     def parseSpine(self, filename):
         """
-            Parse the content.opf file.  Is it good practice to close file used
-            for ElementTree processing?
+            Parse the content.opf file.
         """
         namespaces = {'xmlns': 'http://www.idpf.org/2007/opf',
                 'dc':'http://purl.org/dc/elements/1.1/',
@@ -157,3 +155,6 @@ class EpubParser(object):
             spinePos += 1
 
         return items
+
+class EpubError(Exception):
+    pass
