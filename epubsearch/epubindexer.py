@@ -64,19 +64,24 @@ class EpubIndexer(object):
 
                     #path = tree.getpath(word.getparent())
                     path = tree.getpath(word)
-                    path = path.split('/');
+                    path = path.split('/')
 
-                    # path of cfi
-                    cfi = cfiBase
-    
-                    for part in path:
-                        match = re.search(r"\d+", part)
+                    cfi_list = []
+                    parent = word.getparent()
+                    child = word
+                    while parent is not None:
+                        i = parent.index(child)
+                        if 'id' in child.attrib:
+                            cfi_list.insert(0,str((i+1)*2)+'[' + child.attrib['id'] + ']')
+                        else:
+                            cfi_list.insert(0,str((i+1)*2))
+                        child = parent
+                        parent = child.getparent()
 
-                        if match:
-                            num = int(match.group())
-                            cfi += "/" + str(num*2)
+                    cfi = cfiBase + '/' + '/'.join(cfi_list)
 
                 item['cfi'] = cfi
+                print cfi
 
                 # check for span -> add class to whole span
                 # token words
