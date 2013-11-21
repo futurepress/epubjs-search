@@ -1,10 +1,11 @@
 from whoosh.index import create_in
 import whoosh.index as index
-from whoosh.fields import *
+from whoosh.fields import Schema, TEXT, ID
 from bs4 import BeautifulSoup
 from whoosh.qparser import QueryParser
 from baseengine import BaseEngine
 import os
+import re
 
 class WhooshEngine(BaseEngine):
     # whoosh
