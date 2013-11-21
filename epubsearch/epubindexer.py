@@ -34,7 +34,6 @@ class EpubIndexer(object):
         r["results"] = []
 
         for hit in rawresults:
-            print hit
             baseitem = {}
             baseitem['title'] = hit["title"]
             baseitem['href'] = hit["href"]
@@ -42,7 +41,7 @@ class EpubIndexer(object):
 
             # print hit.items()
             # find base of cfi
-            cfiBase = hit['cfiBase'] + "/!"
+            cfiBase = hit['cfiBase'] + "!"
 
             # for testing
             baseitem['highlight'] = hit["highlight"]
@@ -52,7 +51,6 @@ class EpubIndexer(object):
                 parsedString = etree.tostring(tree.getroot())
                 # html = etree.HTML(parsedString)
                 xpath = './/*[contains(text(),"'+ q +'")]'
-                print xpath
 
                 matchedList = tree.xpath(xpath)
                 # print len(matchedList)
@@ -63,21 +61,20 @@ class EpubIndexer(object):
 
                     # print word
                     # print word.getparent()
-                    path = tree.getpath(word.getparent())
+
+                    #path = tree.getpath(word.getparent())
+                    path = tree.getpath(word)
                     path = path.split('/');
 
                     # path of cfi
                     cfi = cfiBase
-
+    
                     for part in path:
-                        if part == '*':
-                            cfi += "2"
-                        elif part:
-                            match = re.search(r"\d+", part)
+                        match = re.search(r"\d+", part)
 
-                            if match:
-                                num = int(match.group())
-                                cfi += "/" + str(num*2)
+                        if match:
+                            num = int(match.group())
+                            cfi += "/" + str(num*2)
 
                 item['cfi'] = cfi
 
