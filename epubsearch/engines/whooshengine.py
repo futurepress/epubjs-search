@@ -21,17 +21,18 @@ class WhooshEngine(BaseEngine):
             print "openning database {} failed".format(self.database)
 
     def create(self):
+
+        if not os.path.exists(self.database):
+            os.mkdir(self.database)
+
         try:
             print "openning database {} to create".format(self.database)
-            self.ix = index.open_dir(self.database)
+            self.ix = index.create_in(self.database, self.schema)
         except Exception, e:
-            print "openning database failed, creating {}".format(self.database)
-            os.mkdir(self.database)
-            self.ix = create_in(self.database, self.schema)
-
+            print e
 
         self.writer = self.ix.writer()
-    
+
     def add(self, path='', href='', title='', cfiBase='', spinePos=''):
         text = self.__get_text(path)
         self.writer.add_document(title=unicode(title.decode('utf-8')), path=unicode(path), href=unicode(href), cfiBase=unicode(cfiBase), spinePos=unicode(spinePos), content=unicode(text))
