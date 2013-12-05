@@ -8,11 +8,11 @@ class EpubIndexer(object):
     epub = False
     engine = False
 
-    def __init__(self, engineName=False):
+    def __init__(self, engineName=False, databaseName=False):
         if engineName:
             mod = importlib.import_module("epubsearch.engines.%sengine" % engineName)
             # import whooshengine as engine
-            self.engine = getattr(mod,'%sEngine' % engineName.capitalize())(epub.name)
+            self.engine = getattr(mod,'%sEngine' % engineName.capitalize())(databaseName)
             print self.engine
 
     def load(self, epub):

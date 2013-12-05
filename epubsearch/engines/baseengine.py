@@ -2,7 +2,7 @@ class BaseEngine(object):
     
     database = ''
 
-    def __init__(self, databaseName="indexdir"):
+    def __init__(self, databaseName="epubdb"):
         self.databaseName = databaseName
         self.databasePath = "databases/" + databaseName
         self.open()
