@@ -2,8 +2,9 @@ class BaseEngine(object):
     
     database = ''
 
-    def __init__(self, database="indexdir"):
-        self.database = database
+    def __init__(self, databaseName="indexdir"):
+        self.databaseName = databaseName
+        self.databasePath = "databases/" + databaseName
         self.open()
         pass
 

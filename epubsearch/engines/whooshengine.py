@@ -10,25 +10,21 @@ import re
 class WhooshEngine(BaseEngine):
     # whoosh
     schema = Schema(title=TEXT(stored=True), path=TEXT(stored=True), href=ID(stored=True), cfiBase=TEXT(stored=True), spinePos=TEXT(stored=True), content=TEXT)
-    database = ''
-
-    # def __init__(self, database="indexdir"):
-    #     self.database = database
 
     def open(self):
         try:
-            self.ix = index.open_dir(self.database)
+            self.ix = index.open_dir(self.databasePath)
         except Exception, e:
-            print "openning database {} failed".format(self.database)
+            print "openning database {} failed".format(self.databaseName)
 
     def create(self):
 
-        if not os.path.exists(self.database):
-            os.mkdir(self.database)
+        if not os.path.exists(self.databasePath):
+            os.mkdir(self.databasePath)
 
         try:
-            print "openning database {} to create".format(self.database)
-            self.ix = index.create_in(self.database, self.schema)
+            print "openning database {} to create".format(self.databaseName)
+            self.ix = index.create_in(self.databasePath, self.schema)
         except Exception, e:
             print e
 
