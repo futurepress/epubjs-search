@@ -12,6 +12,8 @@ class EpubParser(object):
     spineElementNum = str(6) #replace this with xml check for which child of root 'spine' is x 2
 
     def __init__(self, path):
+        self.name = path.replace('/', '');
+        
         folder = path  + "/"
         if os.path.isdir(folder) == True:
             rootfile = self.parseRootFile(folder)

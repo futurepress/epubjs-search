@@ -30,7 +30,7 @@ class BaseEngine(object):
 
     def add(self, path='', href='', title='', cfiBase='', spinePos=''): 
         '''
-        Called to load one file at a time from the spine
+        Called to load a single document from the spine
             - path = Relative path to the chapter
             - href = URL to chapter from the manifest
             - title = Title from the TOC
