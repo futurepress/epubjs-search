@@ -3,6 +3,7 @@ from flask import request
 from flask import jsonify
 
 from epubsearch import EpubIndexer
+from epubsearch import crossdomain
 
 app = Flask(__name__)
 index = EpubIndexer("whoosh")
@@ -12,6 +13,7 @@ def home():
     return "try /search?q=whale"
 
 @app.route("/search")
+@crossdomain(origin='*')
 def search():
     query = request.args.get('q')
     results = index.search(query)

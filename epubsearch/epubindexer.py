@@ -8,7 +8,7 @@ class EpubIndexer(object):
     epub = False
     engine = False
 
-    def __init__(self, engineName=False, databaseName=False):
+    def __init__(self, engineName=False, databaseName='indexdir'):
         if engineName:
             mod = importlib.import_module("epubsearch.engines.%sengine" % engineName)
             # import whooshengine as engine
@@ -54,7 +54,6 @@ class EpubIndexer(object):
 
                 matchedList = tree.xpath(xpath)
                 # print len(matchedList)
-
                 for word in matchedList:
                     # copy the base
                     item = baseitem.copy()
@@ -75,23 +74,22 @@ class EpubIndexer(object):
                             cfi_list.insert(0,str((i+1)*2)+'[' + child.attrib['id'] + ']')
                         else:
                             cfi_list.insert(0,str((i+1)*2))
+                        print()
                         child = parent
                         parent = child.getparent()
 
                     cfi = cfiBase + '/' + '/'.join(cfi_list)
 
-                item['cfi'] = cfi
-                print cfi
+                    item['cfi'] = cfi
+                    print cfi
 
-                # check for span -> add class to whole span
-                # token words
-                # if len tokens > 13
-                # get 6 words before and 6 words after
-                # append <b class='match'> + word + </b>
-
-                item['highlight'] = word.text # replace me with above
-                r["results"].append(item)
-
-            print
+                    # check for span -> add class to whole span
+                    # token words
+                    # if len tokens > 13
+                    # get 6 words before and 6 words after
+                    # append <b class='match'> + word + </b>
+    
+                    item['highlight'] = word.text # replace me with above
+                    r["results"].append(item)
 
         return r
