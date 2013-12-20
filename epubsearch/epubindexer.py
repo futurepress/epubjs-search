@@ -74,21 +74,24 @@ class EpubIndexer(object):
                             cfi_list.insert(0,str((i+1)*2)+'[' + child.attrib['id'] + ']')
                         else:
                             cfi_list.insert(0,str((i+1)*2))
-                        print()
                         child = parent
                         parent = child.getparent()
 
                     cfi = cfiBase + '/' + '/'.join(cfi_list)
 
                     item['cfi'] = cfi
-                    print cfi
+                    #print cfi
 
-                    # check for span -> add class to whole span
-                    # token words
-                    # if len tokens > 13
-                    # get 6 words before and 6 words after
-                    # append <b class='match'> + word + </b>
-                    item['highlight'] = createHighlight(word.text, q) # replace me with above
+                    # Create highlight snippet in try / except
+                    # because I'm not convinced its error free for all
+                    # epub texts
+                    try:
+                        item['highlight'] = createHighlight(word.text, q) # replace me with above
+                    except Exception as e:
+                        print "Exception when creating highlight for query", q
+                        print(e)
+                        item['highlight'] = ''
+
                     r["results"].append(item)
 
         return r
@@ -97,13 +100,23 @@ def createHighlight(text, query):
     tag = "<b class='match'>"
     closetag = "</b>"
     offset = len(query)
-    text = trimHighlightText(text, query)
 
-    leading_text = text[:text.find(query)] + tag
+    leading_text = trimLength(text[:text.find(query)],-10) + tag
     word = text[text.find(query):text.find(query)+offset]
-    ending_text = closetag + text[text.find(query)+offset:]
+    ending_text = closetag + trimLength(text[text.find(query)+offset:],10)
 
-    return leading_text + word + ending_text
+    return leading_text + word + endWithPeriods(ending_text)
 
-def trimHighlightText(text, query):
-    return text
+def trimLength(text, words):
+    if words > 0:
+        text_list = text.split(' ')[:words]
+    else:
+        text_list = text.split(' ')[words:]
+
+    return ' '.join(text_list)
+
+def endWithPeriods(text):
+    if text[-1] not in '!?.':
+        return text + ' ...'
+    else:
+        return text
