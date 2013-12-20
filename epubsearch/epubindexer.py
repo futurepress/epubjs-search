@@ -32,6 +32,7 @@ class EpubIndexer(object):
         # print len(rawresults)
         r = {}
         r["results"] = []
+        q = q.lower()
 
         for hit in rawresults:
             baseitem = {}
@@ -46,8 +47,9 @@ class EpubIndexer(object):
             with open(hit["path"]) as fileobj:
                 tree = etree.parse(fileobj)
                 parsedString = etree.tostring(tree.getroot())
-                # html = etree.HTML(parsedString)
-                xpath = './/*[contains(text(),"'+ q +'")]'
+                # case-insensitive xpath search
+                xpath = './/*[contains(translate(text(), "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "abcdefghijklmnopqrstuvwxyz") , "'+ q + '")]'
+                #xpath = './/*[contains(text(),"'+ q +'")]'
 
                 matchedList = tree.xpath(xpath)
                 # print len(matchedList)
@@ -89,6 +91,7 @@ class EpubIndexer(object):
                         print(e)
                         item['highlight'] = ''
 
+                    #item['highlight'] = word.text
                     r["results"].append(item)
 
         return r
@@ -98,9 +101,9 @@ def createHighlight(text, query):
     closetag = "</b>"
     offset = len(query)
 
-    leading_text = trimLength(text[:text.find(query)],-10) + tag
-    word = text[text.find(query):text.find(query)+offset]
-    ending_text = closetag + trimLength(text[text.find(query)+offset:],10)
+    leading_text = trimLength(text[:text.lower().find(query)],-10) + tag
+    word = text[text.lower().find(query):text.lower().find(query)+offset]
+    ending_text = closetag + trimLength(text[text.lower().find(query)+offset:],10)
 
     return leading_text + word + endWithPeriods(ending_text)
 

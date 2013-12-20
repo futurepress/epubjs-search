@@ -41,7 +41,7 @@ class WhooshEngine(BaseEngine):
     def query(self, q, limit=None):
         with self.ix.searcher() as searcher:
             results = []
-            parsedQuery = QueryParser("content", self.ix.schema).parse(q)
+            parsedQuery = QueryParser("content", schema=self.ix.schema).parse(q)
             hits = searcher.search(parsedQuery, limit=limit)
 
             for hit in hits:
