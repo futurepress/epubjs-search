@@ -43,9 +43,6 @@ class EpubIndexer(object):
             # find base of cfi
             cfiBase = hit['cfiBase'] + "!"
 
-            # for testing
-            baseitem['highlight'] = hit["highlight"]
-
             with open(hit["path"]) as fileobj:
                 tree = etree.parse(fileobj)
                 parsedString = etree.tostring(tree.getroot())

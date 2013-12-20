@@ -52,11 +52,6 @@ class WhooshEngine(BaseEngine):
                 item['title'] = hit["title"].encode("utf-8")
                 item['cfiBase'] = hit["cfiBase"].encode("utf-8")
                 item['spinePos'] = hit["spinePos"].encode("utf-8")
-                # print "decoded: " + item['title']
-                with open(hit["path"]) as fileobj:
-                    filecontents = fileobj.read().decode("utf-8")
-                    item['highlight'] = hit.highlights("content", text=filecontents).encode("utf-8")
-
                 results.append(item)
 
             return results
