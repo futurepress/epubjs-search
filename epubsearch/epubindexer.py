@@ -88,8 +88,22 @@ class EpubIndexer(object):
                     # if len tokens > 13
                     # get 6 words before and 6 words after
                     # append <b class='match'> + word + </b>
-    
-                    item['highlight'] = word.text # replace me with above
+                    item['highlight'] = createHighlight(word.text, q) # replace me with above
                     r["results"].append(item)
 
         return r
+
+def createHighlight(text, query):
+    tag = "<b class='match'>"
+    closetag = "</b>"
+    offset = len(query)
+    text = trimHighlightText(text, query)
+
+    leading_text = text[:text.find(query)] + tag
+    word = text[text.find(query):text.find(query)+offset]
+    ending_text = closetag + text[text.find(query)+offset:]
+
+    return leading_text + word + ending_text
+
+def trimHighlightText(text, query):
+    return text
