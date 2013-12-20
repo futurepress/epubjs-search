@@ -3,3 +3,4 @@
 indexdir/*
 *.pyc
 databases/*
+venv
