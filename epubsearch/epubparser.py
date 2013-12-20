@@ -141,7 +141,7 @@ class EpubParser(object):
             item["idref"] = child.attrib['idref']
             item["spinePos"] = spinePos;
 
-            item["cfiBase"] = "/".join([ self.spineElementNum, str(spinePos*2) + '[{}]'.format(item['idref']) ])
+            item["cfiBase"] = "/" + "/".join([ self.spineElementNum, str(spinePos*2) + '[{}]'.format(item['idref']) ])
 
             if item["idref"] in self.manifest:
                 item["href"] = self.manifest[item["idref"]]['href']
