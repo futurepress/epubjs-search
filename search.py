@@ -16,9 +16,12 @@ def home():
 @app.route("/search", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def search():
-    query = request.args.get('q')
-    results = index.search(query)
-    return jsonify(**results)
+    if request.method == 'GET':
+        query = request.args.get('q')
+        results = index.search(query)
+        return jsonify(**results)
+    elif request.method == 'OPTIONS':
+        return 200
 
 @app.after_request
 def after_request(response):
