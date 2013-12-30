@@ -16,21 +16,17 @@ def home():
 @app.route("/search", methods=['GET', 'OPTIONS'])
 @crossdomain(origin='*')
 def search():
-    if request.method == 'GET':
-        query = request.args.get('q')
-        results = index.search(query)
-        return jsonify(**results)
-    elif request.method == 'OPTIONS':
-        return 200
+    query = request.args.get('q')
+    results = index.search(query)
+    return jsonify(**results)
 
 @app.after_request
 def after_request(response):
-    if getattr(g, 'cors', False):
-        response.headers['Access-Control-Allow-Origin'] = "*"
-        response.headers['Access-Control-Allow-Headers'] = 'Accept, Content-Type, Origin, X-Requested-With'
 
+    response.headers['Access-Control-Allow-Origin'] = "*"
+    response.headers['Access-Control-Allow-Headers'] = 'Accept, Content-Type, Origin, X-Requested-With'
     return response
-    
+
 if __name__ == "__main__":
     app.run(debug=True)
 
