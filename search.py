@@ -14,7 +14,7 @@ def home():
     return "try /search?q=whale"
 
 @app.route("/search")
-@crossdomain(origin='*')
+@crossdomain(origin='*', methods=['GET','OPTIONS'])
 def search():
     query = request.args.get('q')
     results = index.search(query)
