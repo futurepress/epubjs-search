@@ -20,13 +20,6 @@ def search():
     results = index.search(query)
     return jsonify(**results)
 
-@app.after_request
-def after_request(response):
-
-    response.headers['Access-Control-Allow-Origin'] = "*"
-    response.headers['Access-Control-Allow-Headers'] = 'Accept, Content-Type, Origin, X-Requested-With'
-    return response
-
 if __name__ == "__main__":
     app.run(debug=True)
 
