@@ -13,8 +13,8 @@ index = EpubIndexer("whoosh")
 def home():
     return "try /search?q=whale"
 
-@app.route("/search")
-@crossdomain(origin='*', methods=['GET','OPTIONS'])
+@app.route("/search", methods=['GET','OPTIONS'])
+@crossdomain(origin='*')
 def search():
     query = request.args.get('q')
     results = index.search(query)
