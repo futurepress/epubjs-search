@@ -2,11 +2,13 @@ epubjs-search - Full Text Indexing and Retrieval for Epub Files
 =============
 
 Engines Supported
+---------------------
 
 * Whoosh
 * Cheshire3
 
 How To Use (assumes a Python 2.7 environment with pip and virtualenv) 
+---------------------
 
 Clone the Repository
 
